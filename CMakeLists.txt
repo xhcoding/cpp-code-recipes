@@ -5,4 +5,4 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(cpp-code-recipes CXX)
 find_package(Catch2 3 REQUIRED)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_subdirectory(performance)
