@@ -1,20 +1,37 @@
 #include <chrono>
+#include <cstdint>
 #include <iostream>
 #include <limits>
 #include <random>
 #include <vector>
 #include <format>
+
+#if defined(_MSC_VER)
+    #define NOINLINE __declspec(noinline)
+#elif defined(__GNUC__) || defined(__clang__)
+    #define NOINLINE __attribute__((noinline))
+#else
+    #define NOINLINE
+#endif
+
 using namespace std;
 
-int64_t Accumulate(vector<int64_t> &arr) {
+NOINLINE int64_t Accumulate(vector<int64_t> &arr) {
     int64_t sum = 0;
-    for (int i = 0; i < arr.size(); i++) {
+    int64_t sum2 = 0;
+    int64_t sum3 = 0;
+    int64_t sum4 = 0;
+    for (int i = 0; i < arr.size(); i += 4) {
         sum += arr[i];
+        sum2 += arr[i + 1];
+        sum3 += arr[i + 2];
+        sum4 += arr[i + 3];
     }
-    return sum;
+    
+    return sum + sum2 + sum3 + sum4;
 }
 
-vector<int64_t> RandGenerator(int n) {
+NOINLINE vector<int64_t> RandGenerator(int n) {
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distrib(numeric_limits<int32_t>::min(),
@@ -24,6 +41,7 @@ vector<int64_t> RandGenerator(int n) {
     for (int i = 0; i < ans.size(); i++) {
         ans[i] = distrib(gen);
     }
+
     return ans;
 }
 
